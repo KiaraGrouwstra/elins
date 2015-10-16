@@ -6,6 +6,8 @@ defmodule Elins.Mixfile do
      version: "0.0.1",
      elixir: ">= 1.1.0",
      description: "Lenses in Elixir",
+     elixirc_paths: ["src"],
+     compilers: Mix.compilers,
      deps: deps,
      package: package]
   end
