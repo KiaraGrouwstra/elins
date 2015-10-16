@@ -3,8 +3,8 @@ defmodule Elins.Mixfile do
 
   def project do
     [app: :elins,
-     version: 0.1,
-     elixir: ">= 1.0",
+     version: "0.0.1",
+     elixir: ">= 1.1.0",
      description: "Lenses in Elixir",
      deps: deps,
      package: package]
