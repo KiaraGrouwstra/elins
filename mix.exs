@@ -13,11 +13,20 @@ defmodule Elins.Mixfile do
   end
 
   def application do
-    [applications: []]
+    [
+      applications: [
+        # :curry
+        :fun
+      ]
+    ]
   end
 
   defp deps do
-    []
+    [
+      # {:curry, github: "niahoo/elixir-curry", tag: "master"}
+      # {:fun, github: "meh/7990856", tag: "master"}
+      {:fun, github: "tycho01/fun", tag: "master"}
+    ]
   end
 
   defp package do

@@ -1,4 +1,5 @@
 defmodule Elins do
+  # use Curry
 
   # getter/setter
   def lens(n) do
@@ -45,13 +46,28 @@ defmodule Elins do
   end
 
   # set a property val for a given path
-  def set(obj, path, val) do
-    (modify(composed_lens(path), fn(_) -> val end)).(obj)
+  def set(path, val) do
+    modify(composed_lens(path), fn(_) -> val end)
   end
 
   # change a property val for a given path with a function
-  def edit(obj, path, fun) do
-    (modify(composed_lens(path), fun)).(obj)
+  def edit(path, fun) do
+    modify(composed_lens(path), fun)
+  end
+
+  # provide a (nested) map of editing functions
+  def editVals(map, path \\ []) do
+    map |> Enum.map(fn({k,v}) ->
+      path_k = path ++ [k]
+      case v do
+        m when is_map(m) ->
+          editVals(m, path_k)
+        f when is_function(f, 1) ->
+          edit(path_k, f)
+        # [f] -> # when is_list(l)
+        #   editVals(l, path_k)
+      end
+    end) |> Fun.comp()
   end
 
 end
