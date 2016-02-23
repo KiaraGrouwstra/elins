@@ -56,27 +56,29 @@ defmodule Elins do
   end
 
   # alter using a (nested) structure (maps) by setting values -- essentially acts as a deep merge
-  def setVals(v, path \\ [])
-  def setVals(map, path) when is_list(path) and is_map(map) do
+  def setVals(v), do: setVals(v, [])
+  defp setVals(v, path)
+  defp setVals(map, path) when is_map(map) do
     map |> Enum.map(fn({k,v}) ->
       setVals(v, path ++ [k])
     end) |> Fun.comp()
   end
-  def setVals(v, path) when is_list(path) do
+  defp setVals(v, path) do
     set(path, v)
   end
 
   # alter using a (nested) structure (maps/lists) of editing functions
-  def editVals(v, path \\ [])
-  def editVals(map, path) when is_list(path) and is_map(map) do
+  def editVals(v), do: editVals(v, [])
+  defp editVals(v, path)
+  defp editVals(map, path) when is_map(map) do
     map |> Enum.map(fn({k,v}) ->
       editVals(v, path ++ [k])
     end) |> Fun.comp()
   end
-  def editVals(fun, path) when is_list(path) and is_function(fun, 1) do
+  defp editVals(fun, path) when is_function(fun, 1) do
     edit(path, fun)
   end
-  def editVals([v], path) when is_list(path) do
+  defp editVals([v], path) do
     edit(path, &(Enum.map(&1, editVals(v, []))))
   end
 
