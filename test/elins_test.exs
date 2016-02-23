@@ -16,6 +16,18 @@ defmodule ElinsTest do
     ).color.g == 0.5
   end
 
+  test "set empty path" do
+    assert (
+      @kitten |> set([], 123).()
+    ) == 123
+  end
+
+  test "edit empty path" do
+    assert (
+      @kitten |> edit([], fn(_v) -> 123 end).()
+    ) == 123
+  end
+
   test "set new key" do
     assert (
       @kitten |> set([:price], 999).()
@@ -33,6 +45,13 @@ defmodule ElinsTest do
     assert (
       @kitten |> editVals(%{ name: &String.upcase/1, color: %{ r: &(0.5 * &1) } }).()
     ) == %{name: "MR. BIGGLESWORTH", color: %{r: 0.5, g: 1.0, b: 1.0}}
+  end
+
+  test "edit through maps and lists" do
+    assert (
+      %{name: "Mr. Bigglesworth", color: %{r: 1.0, g: 1.0, b: 1.0}, children: [ %{num: 1}, %{num: 2}, %{num: 3} ] }
+      |> editVals(%{ name: &String.upcase/1, children: [ %{ num: &(&1 + 1) } ] }).()
+    ) == %{name: "MR. BIGGLESWORTH", color: %{r: 1.0, g: 1.0, b: 1.0}, children: [ %{num: 2}, %{num: 3}, %{num: 4} ] }
   end
 
 end

@@ -14,7 +14,7 @@ defmodule Elins do
     }
   end
 
-  # getter/setter that don't change anything
+  # getter/setter that doesn't change anything
   def lens_id() do
     {
       fn(x) -> x end,
@@ -55,19 +55,18 @@ defmodule Elins do
     modify(composed_lens(path), fun)
   end
 
-  # provide a (nested) map of editing functions
-  def editVals(map, path \\ []) do
+  # alter using a (nested) structure (maps/lists) of editing functions
+  def editVals(v, path \\ [])
+  def editVals(map, path) when is_map(map) do
     map |> Enum.map(fn({k,v}) ->
-      path_k = path ++ [k]
-      case v do
-        m when is_map(m) ->
-          editVals(m, path_k)
-        f when is_function(f, 1) ->
-          edit(path_k, f)
-        # [f] -> # when is_list(l)
-        #   editVals(l, path_k)
-      end
+      editVals(v, path ++ [k])
     end) |> Fun.comp()
+  end
+  def editVals(fun, path) when is_function(fun, 1) do
+    edit(path, fun)
+  end
+  def editVals([v], path) do
+    edit(path, &(Enum.map(&1, editVals(v, []))))
   end
 
 end
