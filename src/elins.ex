@@ -37,7 +37,12 @@ defmodule Elins do
 
   # make function (for a lens + lambda) to set an object property
   def modify({get, put} = _lens, f) do
-    fn(x) -> put.(f.(get.(x)), x) end
+    arity = Fun.arity(f)
+    fn(x) ->
+      args = [get.(x), x]
+      fun = apply(f, Enum.take(args, arity))
+      put.(fun, x)
+    end
   end
 
   # get a lens from a list of properties (from root to dest)
@@ -75,7 +80,7 @@ defmodule Elins do
       editVals(v, path ++ [k])
     end) |> Fun.comp()
   end
-  defp editVals(fun, path) when is_function(fun, 1) do
+  defp editVals(fun, path) when is_function(fun) do
     edit(path, fun)
   end
   defp editVals([v], path) do

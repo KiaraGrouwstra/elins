@@ -60,4 +60,17 @@ defmodule ElinsTest do
     ) == %{name: "MR. BIGGLESWORTH", color: %{r: 1.0, g: 1.0, b: 1.0}, children: [ %{num: 2}, %{num: 3}, %{num: 4} ] }
   end
 
+  test "edit with some properties deriving from others" do
+    total = fn(_x, cat) ->
+      clr = cat.color
+      clr.r + clr.g + clr.b
+    end
+    assert (
+      @kitten |> editVals(%{
+        age: fn(_x, cat) -> cat.name |> String.length() end,
+        color: %{ r: total, g: total, b: total }
+      }).()
+    ) == %{name: "Mr. Bigglesworth", age: 16, color: %{r: 3.0, g: 5.0, b: 9.0}}
+  end
+
 end

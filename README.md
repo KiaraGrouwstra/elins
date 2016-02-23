@@ -27,6 +27,19 @@ kitten |> editVals(%{ name: &String.upcase/1, color: %{ r: &(0.5 * &1) } }).()
 %{name: "Mr. Bigglesworth", children: [ %{num: 1}, %{num: 2}, %{num: 3} ] } |>
 editVals(%{ name: &String.upcase/1, children: [ %{ num: &(&1 + 1) } ] }).()
 # result: new kitten with name upcase'd and each child number incremented
+
+# properties can even derive from other properties
+total = fn(_x, cat) ->
+  clr = cat.color
+  clr.r + clr.g + clr.b
+end
+kitten |> editVals(%{
+  age: fn(_x, cat) -> cat.name |> String.length() end,
+  color: %{ r: total, g: total, b: total }
+}).()
+# result: %{name: "Mr. Bigglesworth", age: 16, color: %{r: 3.0, g: 5.0, b: 9.0}}
+# note that since color properties on kitten were defined in order r -> g -> b,
+# the alterations are triggered in the same order. hence blue gets more here.
 ```
 
 Beside `Map`s these work on [`Structs`](http://elixir-lang.org/getting-started/structs.html) as well (which essentially are `Map`s anyway).
