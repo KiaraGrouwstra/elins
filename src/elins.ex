@@ -55,6 +55,17 @@ defmodule Elins do
     modify(composed_lens(path), fun)
   end
 
+  # alter using a (nested) structure (maps) by setting values -- essentially acts as a deep merge
+  def setVals(v, path \\ [])
+  def setVals(map, path) when is_map(map) do
+    map |> Enum.map(fn({k,v}) ->
+      setVals(v, path ++ [k])
+    end) |> Fun.comp()
+  end
+  def setVals(v, path) do
+    set(path, v)
+  end
+
   # alter using a (nested) structure (maps/lists) of editing functions
   def editVals(v, path \\ [])
   def editVals(map, path) when is_map(map) do

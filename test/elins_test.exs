@@ -41,6 +41,12 @@ defmodule ElinsTest do
     ).owner.nemesis == protagonist
   end
 
+  test "setVals (deep merge)" do
+    assert (
+      @kitten |> setVals(%{ name: "Garfield", color: %{ r: 0.5 } }).()
+    ) == %{name: "Garfield", color: %{r: 0.5, g: 1.0, b: 1.0}}
+  end
+
   test "edit multiple values using different functions" do
     assert (
       @kitten |> editVals(%{ name: &String.upcase/1, color: %{ r: &(0.5 * &1) } }).()
