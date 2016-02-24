@@ -44,4 +44,7 @@ kitten |> editVals(%{
 
 Beside `Map`s these work on [`Structs`](http://elixir-lang.org/getting-started/structs.html) as well (which essentially are `Map`s anyway).
 
-This started as a minimal Elixir port of @jlouis's [erl-lenses](https://github.com/jlouis/erl-lenses), which was to be superseded by his [forge](https://github.com/jlouis/forge). Since then I've expanded on it a bit (`setVals`, `editVals`).
+This started as a minimal Elixir port of @jlouis's [erl-lenses](https://github.com/jlouis/erl-lenses), which was to be superseded by his [forge](https://github.com/jlouis/forge), but expanded from there to expose this friendlier interface.
+
+* Q: how about chaining multiple functions?
+* A: [compose](https://github.com/tycho01/fun) them.
