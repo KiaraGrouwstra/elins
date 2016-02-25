@@ -48,3 +48,6 @@ This started as a minimal Elixir port of @jlouis's [erl-lenses](https://github.c
 
 * Q: how about chaining multiple functions?
 * A: [compose](https://github.com/tycho01/fun) them.
+
+* Q: Why the ugly `.()`? :(
+* A: It ends up nicer for iteration; you could do say `my_kittens |> Enum.map(setVals(%{ ... }))` to have the lens initialize once then get used for each item in your list.
